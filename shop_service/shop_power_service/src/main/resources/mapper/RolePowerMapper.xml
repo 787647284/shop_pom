@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qf.dao.RolePowerMapper">
+    <select id="rolePower" resultType="com.qf.entity.Power">
+         /*查询出所有权限，并找出该角色已经选中的权限*/
+        select r.*,if((select rid from role_power_table where rid=#{id} and pid=r.id),'true','false') as checked from power r
+    </select>
+</mapper>

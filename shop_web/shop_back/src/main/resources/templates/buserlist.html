@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="${#request.getContextPath()+'/'}">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Insert title here</title>
+    <!-- Invalid Stylesheet. This makes stuff look pretty. Remove it if you want the CSS completely valid -->
+    <!-- Reset Stylesheet -->
+    <link rel="stylesheet" href="resources/css/reset.css" type="text/css"
+          media="screen" />
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="resources/css/style.css" type="text/css"
+          media="screen" />
+    <link rel="stylesheet" href="resources/css/invalid.css" type="text/css"
+          media="screen" />
+
+    <!--                       Javascripts                       -->
+    <!-- jQuery -->
+    <script type="text/javascript"
+            src="resources/scripts/jquery-1.8.3.min.js"></script>
+    <!-- jQuery Configuration -->
+   <!-- <script type="text/javascript"
+            src="resources/scripts/simpla.jquery.configuration.js"></script>-->
+    <!--弹出框jquery时间-->
+    <script type="text/javascript" src="resources/widget/dialog/jquery-ui-1.9.2.custom.min.js"></script>
+    <!--联网样式（在线）-->
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+</head>
+<body>
+<div id="main-content">
+    <div class="content-box">
+        <!-- End .content-box-header -->
+        <div class="content-box-content">
+            <div class="tab-content default-tab" id="tab1">
+                <table>
+                    <thead>
+                    <tr>
+                        <th><input class="check-all" type="checkbox" /></th>
+                        <th>编号</th>
+                        <th>用户名</th>
+                        <th>真实姓名</th>
+                        <th>入职时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user:${users}">
+                        <td><input type="checkbox" /></td>
+                        <td th:text="${user.id}">Lorem ipsum dolor</td>
+                        <td th:text="${user.username}"><a href="#" title="title">Sit amet</a></td>
+                        <td th:text="${user.name}">Consectetur adipiscing</td>
+                        <td th:text="${#dates.format(user.createtime,'yyyy-MM-dd')}">Donec tortor diam</td>
+                        <td>
+                            <!-- Icons --> <a href="#" title="Edit"><img
+                                src="resources/images/icons/pencil.png" alt="Edit" />
+                        </a>
+                            <a
+                                href="#" title="Delete"><img
+                                src="resources/images/icons/cross.png" alt="Delete" />
+                            </a>
+                            <a
+                                th:onclick="|set_user_role(${user.id})|" title="Edit Meta"><img
+                                src="resources/images/icons/hammer_screwdriver.png"
+                                alt="Edit Meta" />
+                            </a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            <div class="bulk-actions align-left">
+                                <a class="mybutton" onclick="open_dialog()">添加员工</a>
+                            </div>
+                            <div class="pagination">
+                                <a href="#" title="First Page">&laquo; First</a><a href="#"
+                                                                                   title="Previous Page">&laquo; Previous</a> <a href="#"
+                                                                                                                                 class="number" title="1">1</a> <a href="#" class="number"
+                                                                                                                                                                   title="2">2</a> <a href="#" class="number current" title="3">3</a>
+                                <a href="#" class="number" title="4">4</a> <a href="#"
+                                                                              title="Next Page">Next &raquo;</a><a href="#"
+                                                                                                                   title="Last Page">Last &raquo;</a>
+                            </div> <!-- End .pagination -->
+                            <div class="clear"></div>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <!-- End .content-box-content -->
+    </div>
+</div>
+<!-- End #main-content -->
+<!--代表一个弹出框-->
+<!--只有jquery 1.8.3以上的版本才支持-->
+<script>
+    /**
+     * 设置员工所属的角色
+     */
+    function set_user_role(uid){
+            //利用隐藏域存员工id
+        $("#uid").val(uid);
+        //使用ajax查询出这个用户所选中的角色以及未选中的
+        $.get("/role/listajax",{"uid":uid},function (data) {
+                console.log(data)
+                //遍历所有角色
+        var html="";
+        for(var i=0 ; i<data.length;i++){
+            debugger
+            if(data[i].checked){
+                html+="<input type='checkbox' name='rid' value='"+ data[i].id +"' checked/> "+ data[i].rolename+"</br>";
+            }else{
+                html+="<input type='checkbox' name='rid' value='"+ data[i].id +"'/> "+ data[i].rolename+"</br>";
+
+            }
+        }
+            $("#show_role_div").html(html);
+        },"json");
+        //通过dialog弹出当前所有的角色
+        $("#edit_role_div").dialog({
+            title: "选择角色",
+            modal: true
+        });
+
+    }
+    function open_dialog(){
+        $("#dialog_div").dialog({
+            /*标题*/
+            title: "员工添加页面",
+            width:400,
+            height:300,
+            //弹框出现时不能操作弹出外的其他选项
+            modal:true
+        });
+    }
+</script>
+<div id="dialog_div" style="display: none"> <!--默认隐藏-->
+        <form method="post" action="/buser/insert">
+            用户名<input name="username"/><br/>
+            密码<input name="password"/><br/>
+            员工姓名<input name="name"/><br/>
+            性别<input type="radio" name="sex" th:value="1"/>男<input type="radio" name="sex" th:value="0"/>女
+            <button type="submit">添加</button>
+
+        </form>
+</div>
+<!--员工编剧模板-->
+<div id="edit_role_div" style="display: none; "/>
+<form action="/buser/updaterole" method="post">
+<!--职工的id-->
+    <input type="hidden" id="uid" name="uid" value=""/>
+<!--角色的复选框-->
+        <div id="show_role_div"></div>
+    <button type="submit">确定</button>
+</form>
+
+</div>
+</body>
+</html>
