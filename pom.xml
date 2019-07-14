@@ -6,6 +6,9 @@
     <modules>
         <module>shop_entity</module>
         <module>shop_service_api</module>
+        <module>rabbitmq_java_demo/rabbitmq_java_demo</module>
+        <module>shop_commons/shop_commons</module>
+        <module>shop_commons</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -34,10 +37,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
     </dependencies>
 

@@ -1,6 +1,6 @@
 dubbo:
   application:
-    name: user_service
+    name: role_service
   registry:
     address: zookeeper://192.168.225.188:2181
   protocol:

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <base th:href="${#request.getContextPath()+'/'}">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Insert title here</title>
+    <!-- Invalid Stylesheet. This makes stuff look pretty. Remove it if you want the CSS completely valid -->
+    <!-- Reset Stylesheet -->
+    <link rel="stylesheet" href="resources/css/reset.css" type="text/css"
+          media="screen" />
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="resources/css/style.css" type="text/css"
+          media="screen" />
+    <link rel="stylesheet" href="resources/css/invalid.css" type="text/css"
+          media="screen" />
+
+    <!--                       Javascripts                       -->
+    <!-- jQuery -->
+    <script type="text/javascript"  src="resources/scripts/jquery-1.8.3.min.js"></script>
+    <!-- jQuery Configuration -->
+   <!-- <script type="text/javascript"
+            src="resources/scripts/simpla.jquery.configuration.js"></script>-->
+    <!--弹出框jquery事件-->
+    <script type="text/javascript" src="resources/widget/dialog/jquery-ui-1.9.2.custom.min.js"></script>
+    <!--联网样式（在线）-->
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+        <!--导入图片上传插件-->
+        <script type="text/javascript" src="resources/widget/webuploader/webuploader.min.js"></script>
+        <link rel="stylesheet" href="resources/widget/webuploader/webuploader.css">
+        <!--富文本-->
+        <script src="https://unpkg.com/wangeditor@3.1.1/release/wangEditor.min.js"></script>
+    <script type="text/javascript" src="resources/widget/zTree/jquery.ztree.all.min.js"></script>
+    <link rel="stylesheet" href="resources/widget/zTree/zTreeStyle/zTreeStyle.css">
+</head>
+<body>
+<div id="main-content">
+    <div class="content-box">
+        <!-- End .content-box-header -->
+        <div class="content-box-content">
+            <div class="tab-content default-tab" id="tab1">
+                <table>
+                    <thead>
+                    <tr>
+                        <th><input  class="check-all" type="checkbox" /></th>
+                        <th>编号</th>
+                        <th>商品名字</th>
+                        <th>商品图片</th>
+                        <th>商品描述</th>
+                        <th>商品价格</th>
+                        <th>商品库存</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="goodss:${goods}">
+                        <td><input type="checkbox" /></td>
+                        <td th:text="${goodss.id}">Lorem ipsum dolor</td>
+                        <td th:text="${goodss.gname}"><a href="#" title="title">Sit amet</a></td>
+                        <td><img th:each="img:${#strings.listSplit(goodss.gimage,'|')}"
+                                th:src="|http://192.168.225.188:8080/${img}|"
+                                 style="width: 100px; height: 80px; margin-right: 5px"
+                        />
+                        </td>
+                        <td th:utext="${goodss.ginfo}" style="width: 200px">Consectetur adipiscing</td>
+<!--
+                        <td><a th:onclick="|goodsinfos(${goodss.id})|"  th:text="商品详情"></a></td>
+-->
+                        <td th:text="${#numbers.formatCurrency(goodss.gprice)}">Donec tortor diam</td>
+                        <td th:text="${goodss.gsave}"></td>
+                        <td>
+                            <!-- Icons --> <a href="#" title="Edit"><img
+                                src="resources/images/icons/pencil.png" alt="Edit" />
+                        </a>
+                            <a
+                                th:onclick="|delete_goods(${goodss.id})|" title="Delete"><img
+                                src="resources/images/icons/cross.png" alt="Delete" />
+                            </a>
+                            <!--给商品设置分类-->
+                            <a
+                                th:onclick="|set_goods_goodstype(${goodss.id})|" title="Edit Meta"><img
+                                src="resources/images/icons/hammer_screwdriver.png"
+                                alt="Edit Meta" />
+                            </a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            <div class="bulk-actions align-left">
+                                <a sec:authorize-url="/buseditorer/insert" class="mybutton" onclick="open_dialog()">添加商品</a>
+                            </div>
+                            <div class="pagination">
+                                <a href="#" title="First Page">&laquo; First</a><a href="#"
+                                                                                   title="Previous Page">&laquo; Previous</a> <a href="#"
+                                                                                                                                 class="number" title="1">1</a> <a href="#" class="number"
+                                                                                                                                                                   title="2">2</a> <a href="#" class="number current" title="3">3</a>
+                                <a href="#" class="number" title="4">4</a> <a href="#"
+                                                                              title="Next Page">Next &raquo;</a><a href="#"
+                                                                                                                   title="Last Page">Last &raquo;</a>
+                            </div> <!-- End .pagination -->
+                            <div class="clear"></div>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <!-- End .content-box-content -->
+    </div>
+</div>
+<!-- End #main-content -->
+<!--代表一个弹出框-->
+<!--只有jquery 1.8.3以上的版本才支持-->
+<script>
+$(function(){
+//富文本使用
+    var E = window.wangEditor;
+    var editor = new E('#div1');
+//重新设置富文本的内容
+
+    editor.customConfig.menus = [
+        'head',  // 标题
+        'bold',  // 粗体
+        'fontSize',  // 字号
+        'italic',  // 斜体
+        'underline',  // 下划线
+        'foreColor',  // 文字颜色
+        'link',  // 插入链接
+        'justify',  // 对齐方式
+        'image',  // 插入图片
+        'undo',  // 撤销
+        'redo'  // 重复
+    ];
+/*// 隐藏“网络图片”tab
+    editor.customConfig.showLinkImg = false;
+// 将图片大小限制为 3M
+    editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+// 限制一次最多上传 1 张图片
+    editor.customConfig.uploadImgMaxLength = 3;
+//开启wangEditor的错误提示
+    editor.customConfig.debug=true;
+// 关闭粘贴样式的过滤
+    editor.customConfig.pasteFilterStyle = false;
+// 忽略粘贴内容中的图片
+    editor.customConfig.pasteIgnoreImg = true;*/
+//上传图片 将图片以文件的形式传给后台进行操作返回图片 url
+    editor.customConfig.customUploadImg = function (files, insert) {
+        var date = new FormData();
+        date.append("file", files[0]);
+        $.ajax({
+            type: "POST",
+            url: "/goods/uploadImg",   /*上传图片的Url*/
+            data: date,
+            dataType: 'json',    /*回传的数据必须是json*/
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                var url="http://192.168.225.188:8080/"+result.filepath;   /*回传的必须是json类型，才能取到值 */
+                alert(url)          /*上传成功后  返回的filepath 通过result回调对象获得  */
+                insert(url);// insert 是获取图片 url 后，插入到编辑器的方法
+            }
+        })
+    };
+    //初始化web uoloader(上传插件)
+    editor.create();//创建富文本
+        var uploader=WebUploader.create({
+           //选择文件后，是否自动上传？
+            auto:true,
+            //swf文件路径
+            swf: 'resources/widget/webuploader/Uploader.swf',
+            //文件接收端
+            server:'/goods/uploadImg',
+            //设置选择文件的按钮
+            pick:'#filePicker',
+            //设置只允许选择图片文件
+            accept:{
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
+    //设置uploader的各种事件
+    // 当有文件添加进来的时候
+    uploader.on( 'fileQueued', function( file ) {
+
+        // 创建缩略图
+        // 如果为非图片文件，可以不用调用此方法。
+        // thumbnailWidth x thumbnailHeight 为 100 x 100
+        uploader.makeThumb( file, function( error, src ) {
+            if ( error ) {
+                alert("该文件不能生成缩略图！");
+                return;
+            }
+
+            var img = "<img src='" + src + "' style='width: 100px; height: 100px; margin: 10px'/>";
+            $("#showPic").append(img); //向文件展示框处增加缩略图
+        }, 100, 100);
+    });
+    /*当文件上传成功时  触发  response（回调上传成功的对象）*/
+    uploader.on('uploadSuccess', function(file, response){
+        alert(file.name + "上传成功，上传后的路径为:" + response.filepath)  //通过返回的json的key获得value
+        var images = $("#gimage").val();  //获取当前隐藏域的值
+        if(images != ""){   //如果值不为空 证明有多张图片  加上|进行拼接 划分上传路径 隐藏域提交给用户
+            images += "|";
+        }//加了/后拼路径
+        images += response.filepath;
+        alert(images)
+        $("#gimage").val(images);
+    });
+    $("#button").click(function () {     /*获取富文本的值*/
+        $("#data").val(editor.txt.html());/*通过隐藏域提交*/
+/*        var ztr=$("#div1").html();*/
+/*        $("#data").val($("#div1").html());
+        alert("ztr"+ztr)
+        alert(editor.val())
+        alert(editor.html)
+        alert(editor.txt.html())
+        alert(editor.txt.text());
+        alert(editor)*/
+    });
+});
+    function open_dialog() {
+        $("#dialog_div").dialog({
+            title:"添加商品",
+            width: 800,
+            height:500,
+            modal:true
+        });
+
+    }
+/*function goodsinfos(ginfo) {
+    $("#goodsinfo_div").dialog({
+        title:"商品描述",
+        width: 800,
+        height:500,
+        modal:true
+    });
+    $("#aaa").html()*/
+
+var roleid;
+var zTreeObject;/*树结构对象*/
+var typeid;
+function set_goods_goodstype(tid) {
+    alert(tid)
+    roleid=tid;
+    //ztree的核心配置对象
+    var setting = {
+        data:{
+            key:{
+                name:"typename"
+            },
+            simpleData:{
+                enable:true,
+                pIdKey:"pid"
+            }
+        },
+        view:{
+            //隐藏节点图标
+            showIcon:false
+        },
+        check:{
+            enable: true,
+            chkStyle: "radio",
+            chkboxType: {"Y":"ps", "N":"ps"},
+            radioType: "all"
+        },
+        callback:{
+            //节点点击事件的回调方法           (treeNode 返回当前点击的json对象)
+            onClick:function(event, treeId, treeNode){
+                alert("点击了节点：" + treeNode.pid);
+                alert("该节点的id为"+treeNode.id);
+                if(treeNode.status == 3){
+                    typeid =treeNode.id;/*给表单赋值*/
+                    alert("赋值"+treeNode.id);
+                }else{
+                    alert("请选择子菜单做为商品类型")
+                    //关闭弹出框
+                    $("#ztree_div").dialog("close");
+                }
+            }
+        }
+    };
+    //通过ajax回显，显示所有的权限，并且勾选该角色已经有的权限
+    $.get("/type/goodsTypeByid",{"tid":tid},function (date) {
+        console.log(date)
+        zTreeObject = $.fn.zTree.init($("#ztreeDiv"), setting, date);
+        zTreeObject.expandAll(false);//全部展开
+    },"json")
+    $("#ztree_div").dialog({
+        title:"选择类别",
+        modal:true
+    });
+
+}
+function update_goodstype() {
+    $.get("/goods/goodsTypeByid",{"typeid":typeid,"id":roleid},function (date) {
+                window.location.href="redirect:/goods/goodList";
+    },"json")
+}
+/*删除*/
+function delete_goods(id) {
+    alert("111111111111")
+    $.get("/goods/deletegoods",{"id":id},function (data){
+                if(data>0){
+                    window.location.reload()
+                }
+    },"json")
+}
+</script>
+<!--隐藏弹出框-->
+<div id="dialog_div" style="display: none;">
+    <form action="/goods/insert" method="post" enctype="multipart/form-data">
+        商品名称:<input name="gname"/>
+        商品图片:
+        <div id="filePicker">选择图片</div>
+        <div id="showPic" style="width: 600px; height:150px; border: #ff0000 solid 1px"></div>
+        <input id="gimage" name="gimage" type="hidden" value=""/>
+        <br/>
+        商品价格:<input name="gprice"/><br/>
+        商品库存:<input name="gsave"/><br/>
+        <!--商品描述:<textarea name="ginfo" rows="7" cols="5"></textarea><br/>-->
+        <div id="div1"></div>   <!--必须有个div盒子 -->
+        <input type="hidden" id="data" value="" name="ginfo"/>
+        <button id="button" type="submit">添加</button>
+    </form>
+</div>
+<div id="ztree_div" style="display: none;">
+    <div id="ztreeDiv" class="ztree"></div>
+    <input type="hidden" name="typeid" id="typeid"/>
+    <button onclick="update_goodstype();" type="button">提交</button>
+</div>
+<div id="goodsinfo_div" style="display: none;">
+    <div id="aaa"></div>
+</div>
+</body>
+</html>

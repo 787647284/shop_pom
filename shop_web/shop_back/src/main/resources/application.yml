@@ -3,6 +3,11 @@ server:
 spring:
   thymeleaf:
     cache: false
+  servlet:
+    multipart:
+      #限制上传文件的大小 一次请求的大小
+      max-file-size: 10MB
+      max-request-size: 10MB
 dubbo:
   application:
     name: back_web
@@ -10,3 +15,15 @@ dubbo:
     address: zookeeper://192.168.225.188:2181
   consumer:
     check: false
+path:
+  img: D:/img/
+fdfs:    #读取时间 ，  连接超时时间   tracher Ip和端口 缩略图
+  so-timeout: 10000
+  connect-timeout: 10000
+  tracker-list:
+    - 192.168.225.188:22122
+  thumb-image:
+    width: 100
+    height: 100
+  pool:
+    jmx-enabled: false

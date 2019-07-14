@@ -9,6 +9,8 @@ import com.qf.dao.UserRoleMapper;
 import com.qf.entity.BackUser;
 import com.qf.entity.UserRoleTable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -19,9 +21,6 @@ import java.util.List;
  */
 @Service
 public class BackServiceImpl implements IBackService {
-
-
-
     @Autowired
     BackMapper backMapper;
     @Autowired
@@ -45,21 +44,32 @@ public class BackServiceImpl implements IBackService {
         queryWrapper.eq("uid",uid);
         userRoleMapper.delete(queryWrapper);
         //将新的角色和用户对多对保存到中间表中
-        for (Integer rids : rid){
-            UserRoleTable ssss=new UserRoleTable(uid,rids);
-            userRoleMapper.insert(ssss);
-       }
+      if (rid!=null){
+          for (Integer rids : rid){
+              UserRoleTable ssss=new UserRoleTable(uid,rids);
+              userRoleMapper.insert(ssss);
+          }
+      }
 
         }
 
     @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        BackUser backUser = backMapper.queryByUserName(username);
+        if(backUser==null){
+            throw  new UsernameNotFoundException("该用戶不存在");
+        }
+        return backUser;
+    }
+
+   /* @Override
     public BackUser login(String username, String password) {
         BackUser backUser = backMapper.queryByUserName(username);
         if(backUser!=null &&backUser.getPassword().equals(password)){
                 return backUser;
         }
         return null;
-    }
+    }*/
 }
 
 

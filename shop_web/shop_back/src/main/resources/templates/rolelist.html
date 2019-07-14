@@ -16,17 +16,13 @@
 
     <!--                       Javascripts                       -->
     <!-- jQuery -->
-    <script type="text/javascript"
-            src="resources/scripts/jquery-1.8.3.min.js"></script>
-    <!-- jQuery Configuration -->
-    <!-- <script type="text/javascript"
-             src="resources/scripts/simpla.jquery.configuration.js"></script>-->
-    <!--弹出框jquery时间-->
+    <script type="text/javascript" src="resources/scripts/jquery-1.8.3.min.js"></script>
+    <!--弹出框jquery事件-->
     <script type="text/javascript" src="resources/widget/dialog/jquery-ui-1.9.2.custom.min.js"></script>
     <!--联网样式（在线）-->
     <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
     <script type="text/javascript" src="resources/widget/zTree/jquery.ztree.all.min.js"></script>
-    <link rel="stylesheet" href="resources/widget/zTree/zTreeStyle/zTreeStyle.css">
+        <link rel="stylesheet" href="resources/widget/zTree/zTreeStyle/zTreeStyle.css">
 </head>
 <body>
 <div id="main-content">
@@ -125,8 +121,8 @@
         };
             //通过ajax回显，显示所有的权限，并且勾选该角色已经有的权限
         $.get("/power/queryPowersByRid",{"rid":rid},function (date) {
+            alert("aaaaaaaaaa!!!!!!!!!!!!!!!")
             console.log(date)
-           /* zTreeObject=$.fn.zTree.init($("#ztreeDiv"),setting,date);*/
             zTreeObject = $.fn.zTree.init($("#ztreeDiv"), setting, date);
             zTreeObject.expandAll(true);//全部展开
         },"json")

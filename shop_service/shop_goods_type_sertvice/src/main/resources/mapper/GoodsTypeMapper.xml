@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qf.dao.GoodsTypeMapper">
+
+    <select id="getGoodsType" resultType="com.qf.entity.GoodsType">
+    select s.*,a.typename as pname from goodstype s  left JOIN goodstype a on s.pid=a.id ORDER BY s.id
+    </select>
+    <select id="getGoodsTypeByid" resultType="com.qf.entity.GoodsType">
+        select s.*, if ((select tid from goods a where a.id=#{id} and a.tid=s.id),'true','false') as checked from goodstype s
+    </select>
+</mapper>

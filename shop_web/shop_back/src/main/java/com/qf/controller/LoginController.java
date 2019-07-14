@@ -22,7 +22,7 @@ public class LoginController {
     public String tologin(){
         return "login";
     }
-    @RequestMapping("/login")
+  /*  @RequestMapping("/login")
     public String login(String username,String password,Model model){
         System.out.println(username+""+password);
         BackUser user = backService.login(username, password);
@@ -32,6 +32,9 @@ public class LoginController {
             return "index";
         }
         return "redirect:/tologin?error=1";
+    }*/
+    @RequestMapping("/noperssion")
+    public String tonoperssion(){
+        return "noperssion";
     }
-
 }
