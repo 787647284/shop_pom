@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.qf.Service.IGoodsService;
 import com.qf.Service.IGoodsTypeService;
 import com.qf.dao.GoodsTypeMapper;
+import com.qf.entity.Goods;
 import com.qf.entity.GoodsType;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,5 +31,10 @@ public class GoodsTypeServiceImpl implements IGoodsTypeService {
     @Override
     public List<GoodsType> getGoodsTypeByid(Integer id) {
         return goodsTypeMapper.getGoodsTypeByid(id);
+    }
+
+    @Override
+    public List<GoodsType> getGoodsandType(Integer tid) {
+        return   goodsTypeMapper.getGoodsandType(tid);
     }
 }

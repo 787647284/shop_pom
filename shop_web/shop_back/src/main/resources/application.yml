@@ -1,5 +1,7 @@
+#Tomcat配置端口
 server:
   port: 8888
+#Spring boot配置文件  关闭thymeleaf缓存 否则看不到实时的效果 上线可开启
 spring:
   thymeleaf:
     cache: false
@@ -8,16 +10,19 @@ spring:
       #限制上传文件的大小 一次请求的大小
       max-file-size: 10MB
       max-request-size: 10MB
+#配置dubbo监控中心中心   配置zookeeper注册中心地址
 dubbo:
   application:
     name: back_web
   registry:
     address: zookeeper://192.168.225.188:2181
+    #关闭启动时检查 可以消除启动顺序  避免出现注册时 没有提供者 报错
   consumer:
     check: false
+    #配置的上传路径
 path:
   img: D:/img/
-fdfs:    #读取时间 ，  连接超时时间   tracher Ip和端口 缩略图
+fdfs:    # 分布式文件系统 读取时间 ，连接超时时间   tracher服务（追踪者）Ip和端口 缩略图 上传图片后自动生成的缩略图大小
   so-timeout: 10000
   connect-timeout: 10000
   tracker-list:

@@ -25,6 +25,5 @@ public class SearchController {
         System.out.println(goods);
         model.addAttribute("goodsList",goods);
         return  "searchlist";
-
     }
 }

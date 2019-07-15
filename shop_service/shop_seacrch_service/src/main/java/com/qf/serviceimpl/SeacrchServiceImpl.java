@@ -38,6 +38,7 @@ public class SeacrchServiceImpl implements ISearchService {
             String s=String.format(str,keyword,keyword);
             solrQuery=new SolrQuery(s);
         }
+
         //设置查询高亮
         solrQuery.setHighlight(true);
         //设置高亮的前缀

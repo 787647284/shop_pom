@@ -57,7 +57,7 @@ public class GoodsServiceImpl implements IGoodsService {
 
     @Override
     public List<Goods> getGoodsandType(Integer tid) {
-        return null;
+        return goodsMapper.getGoodsandType(tid);
     }
 }
 

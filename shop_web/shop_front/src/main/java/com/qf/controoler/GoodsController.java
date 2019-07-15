@@ -6,9 +6,7 @@ import com.qf.Service.IGoodsTypeService;
 import com.qf.entity.GoodsType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -34,9 +32,13 @@ public class GoodsController {
         return "index";
     }
     @RequestMapping("/goodslist")
-    public Object goodslist( Integer id){
+    public Object goodslist( Integer id,Model model){
         System.out.println("进入了");
         System.out.println(id);
-        return null;
+        List<GoodsType> goodsandType = goodsTypeService.getGoodsandType(id);
+        for (GoodsType goodsType : goodsandType) {
+            model.addAttribute("goodslist",goodsType.getGoods());
+        }
+        return "goodstypelist";
     }
 }

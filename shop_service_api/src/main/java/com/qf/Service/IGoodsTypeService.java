@@ -8,4 +8,5 @@ public interface IGoodsTypeService {
     List<GoodsType> getGoodsType();
     int insertGoodsType(GoodsType goodsType);
     List<GoodsType> getGoodsTypeByid(Integer id);
+    List<GoodsType> getGoodsandType(Integer tid);
 }

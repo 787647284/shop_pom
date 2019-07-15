@@ -2,11 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.qf.dao.GoodsTypeMapper">
-
+    <resultMap id="MyResultMap" type="com.qf.entity.GoodsType">
+        <id column="sid" property="id"></id>
+        <result column="pid" property="pid"></result>
+        <result column="typename" property="typename"></result>
+        <result column="createtime" property="createtime"></result>
+        <result column="status" property="status"></result>
+        <collection property="goods" ofType="com.qf.entity.Goods">
+            <id column="id" property="id"></id>
+            <result column="gname" property="gname"></result>
+            <result column="ginfo" property="ginfo"></result>
+            <result column="gimage" property="gimage"></result>
+            <result column="gprice" property="gprice"></result>
+            <result column="tid" property="tid"></result>
+            <result column="gsave" property="gsave"></result>
+        </collection>
+    </resultMap>
     <select id="getGoodsType" resultType="com.qf.entity.GoodsType">
     select s.*,a.typename as pname from goodstype s  left JOIN goodstype a on s.pid=a.id ORDER BY s.id
     </select>
     <select id="getGoodsTypeByid" resultType="com.qf.entity.GoodsType">
         select s.*, if ((select tid from goods a where a.id=#{id} and a.tid=s.id),'true','false') as checked from goodstype s
+    </select>
+    <select id="getGoodsandType" resultMap="MyResultMap">
+          select g.*,t.id as sid,t.* from goods g JOIN goodstype t on (g.tid=t.id) where g.tid=#{tid}
     </select>
 </mapper>

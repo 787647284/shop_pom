@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * linzebin
@@ -30,4 +31,6 @@ public class GoodsType implements Serializable {
     private String pname;
     @TableField(exist = false)
     private Boolean checked;
+    @TableField(exist = false)
+    private List<Goods> goods;
 }
