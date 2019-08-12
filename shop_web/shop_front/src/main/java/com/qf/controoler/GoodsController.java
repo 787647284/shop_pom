@@ -21,16 +21,6 @@ public class GoodsController {
     IGoodsService goodsService;
     @Reference
     IGoodsTypeService goodsTypeService;
-    @RequestMapping("/goodstype")
-    public Object getGoodsTypelist(Model model){
-        List<GoodsType> goodsType = goodsTypeService.getGoodsType();
-        List<GoodsType> goodsType2 = goodsTypeService.getGoodsType();
-        List<GoodsType> goodsType3 = goodsTypeService.getGoodsType();
-        model.addAttribute("goodsTypes",goodsType);
-        model.addAttribute("goodsTypes2",goodsType);
-        model.addAttribute("goodsTypes3",goodsType);
-        return "index";
-    }
     @RequestMapping("/goodslist")
     public Object goodslist( Integer id,Model model){
         System.out.println("进入了");

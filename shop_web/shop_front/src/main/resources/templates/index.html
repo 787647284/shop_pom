@@ -12,7 +12,36 @@
     <script type="text/javascript" src="js/topNav.js" ></script>
     <script type="text/javascript" src="js/focus.js" ></script>
     <script type="text/javascript" src="js/shop_home_tab.js" ></script>
+    <script src="http://127.0.0.1:8081/js/login.js"></script>
 </head>
+<script>
+  $(function () {
+      $.ajax({
+          url:"http://127.0.0.1:8083/cart/list",
+          success: function(data){
+              if(data != null){
+
+                  //设置商品的数量
+                  $("#numberid").html(data.length);
+
+                  var html = "<ul style=\"width: 100%; height: 200px\" >";
+                  for(var i = 0; i < data.length; i++){
+                      html += "<li style='width: 100%; margin-bottom: 40px'><span>";
+
+                      html += "<img style='width: 60px; height: 50px' " +
+                          "src='http://192.168.225.188:8080/" + data[i].goods.gimage.split("\|")[0] + "'/> <a>" + data[i].goods.gname + "</a> x " + data[i].gnumber;
+                      html += "</span></li>";
+                  }
+                  html += "</ul>";
+
+                  $("#cartsid").html(html);
+              }
+          },
+          dataType:"jsonp",
+          jsonpCallBack:"cartlist"
+      });
+  });
+</script>
 <body>
 <!-- Header  -wll-2013/03/24 -->
 <div class="shop_hd">
@@ -21,7 +50,7 @@
         <div class="shop_hd_topNav_all">
             <!-- Header TopNav Left -->
             <div class="shop_hd_topNav_all_left">
-                <p>您好，欢迎来到<b><a href="/">ShopCZ商城</a></b>[<a >登录</a>][<a >注册</a>]</p>
+                <span id="pid"></span>
             </div>
             <!-- Header TopNav Left End -->
 
@@ -37,6 +66,7 @@
                                     <li><a title="已买到的商品" target="_top" href="#">已买到的商品</a></li>
                                     <li><a title="个人主页" target="_top" href="#">个人主页</a></li>
                                     <li><a title="我的好友" target="_top" href="#">我的好友</a></li>
+                                    <li><a title="我的订单" target="_top" href="http://127.0.0.1:8086/order/list">我的订单</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -55,7 +85,7 @@
 
                     <li>
                         <div class="topNav_menu">
-                            <a href="#" class="topNavHover">购物车<b>0</b>种商品<i></i></a>
+                            <a href="http://127.0.0.1:8083/cart/showlist" class="topNavHover">购物车<b id="numberid">0</b>种商品<i></i></a>
                             <div class="topNav_menu_bd" style="display:none;">
                                 <!--
                                 <ul>
@@ -63,7 +93,7 @@
                                   <li><a title="销售中的商品" target="_top" href="#">销售中的商品</a></li>
                                 </ul>
                                 -->
-                                <p>还没有商品，赶快去挑选！</p>
+                                <p style="width: 300px;height: 200px" id="cartsid">还没有商品，赶快去挑选！</p>
                             </div>
                         </div>
                     </li>
@@ -130,15 +160,14 @@
     <div class="shop_hd_menu">
         <!-- 所有商品菜单 -->
 
-        <div class="shop_hd_menu_all_category shop_hd_menu_hover"><!-- 首页去掉 id="shop_hd_menu_all_category" 加上clsss shop_hd_menu_hover -->
-            <div class="shop_hd_menu_all_category_title"><h2 title="所有商品分类"><a href="javascript:void(0);">所有商品分类</a></h2><i></i></div>
-            <div id="shop_hd_menu_all_category_hd" class="shop_hd_menu_all_category_hd">
-                <ul class="shop_hd_menu_all_category_hd_menu clearfix">
+        <div class="shop_hd_menu_all_category shop_hd_menu_hover"  ><!-- 首页去掉 id="shop_hd_menu_all_category" 加上clsss shop_hd_menu_hover -->
+                    <div class="shop_hd_menu_all_category_title"   ><h2 title="所有商品分类" ><a href="javascript:void(0);" >所有商品分类</a></h2><i ></i></div>
+                    <div id="shop_hd_menu_all_category_hd" class="shop_hd_menu_all_category_hd">
+                        <ul class="shop_hd_menu_all_category_hd_menu clearfix" >
                     <!-- 单个菜单项 -->
-                    <li id="cat_1" class=""  th:each="goodstype:${goodsTypes}">
-                        <a th:if="goodstype.status eq '1' "  th:text="${goodstype.typename}"></a>
+                    <li id="cat_1"  th:each="goodstype:${goodsTypes}" th:if="${goodstype.status == 1}">
                         <!--顶级分类-->
-                        <h3><a  th:title="${goodstype.typename}" title="男女服装" th:if="${goodstype.status == 1}" th:text="${goodstype.typename}"></a></h3>
+                        <h3 ><a  title="男女服装"th:title="${goodstype.typename}"  th:text="${goodstype.typename}"></a></h3>
                         <div id="cat_1_menu" class="cat_menu clearfix" style="">
                             <dl class="clearfix" th:each="goodstype1:${goodsTypes2}">
                                 <!--二级分类-->

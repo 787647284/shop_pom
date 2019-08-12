@@ -16,7 +16,10 @@ dubbo:
     name: back_web
   registry:
     address: zookeeper://192.168.225.188:2181
-    #关闭启动时检查 可以消除启动顺序  避免出现注册时 没有提供者 报错
+  protocol:
+    port: -1
+    name: dubbo
+  #关闭启动时检查 可以消除启动顺序  避免出现注册时 没有提供者 报错
   consumer:
     check: false
     #配置的上传路径

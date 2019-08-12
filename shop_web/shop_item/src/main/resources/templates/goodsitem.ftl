@@ -595,17 +595,26 @@
                 </li>
                 <li class="goods_num">
                     <label>购买数量：</label>
-                    <span><a class="good_num_jian" id="good_num_jian" href="javascript:void(0);"></a><input type="text" value="1" id="good_nums" class="good_nums" /><a href="javascript:void(0);" id="good_num_jia" class="good_num_jia"></a>(当前库存0件)</span>
+                    <span><a class="good_num_jian"  id="good_num_jian" href="javascript:void(0);"></a>
+                        <input type="text" value="1" id="good_nums" class="good_nums" id="good_nums" />
+                        <a href="javascript:void(0);" id="good_num_jia" class="good_num_jia">
+                        </a>(当前库存0件)</span>
                 </li>
                 <li style="padding:20px 0;">
                     <label>&nbsp;</label>
-                    <span><a href="" class="goods_sub goods_sub_gou" >加入购物车</a></span>
+                    <span><a onclick="insertCart()" class="goods_sub goods_sub_gou" >加入购物车</a></span>
                 </li>
             </ul>
         </div>
     </div>
+    <script>
+function insertCart() {
+    var gid = ${goods.id};
+    var gnumber = $("#good_nums").val();
+    location.href = "http://127.0.0.1:8083/cart/insert?gid=" + gid + "&gnumber=" + gnumber;
+}
+    </script>
     <!-- 商品展示 End -->
-
     <div class="clear mt15"></div>
     <!-- Goods Left -->
     <div class="shop_bd_list_left clearfix">

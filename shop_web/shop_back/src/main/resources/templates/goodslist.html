@@ -266,12 +266,12 @@ function set_goods_goodstype(tid) {
         check:{
             enable: true,
             chkStyle: "radio",
-            chkboxType: {"Y":"ps", "N":"ps"},
+
             radioType: "all"
         },
         callback:{
             //节点点击事件的回调方法           (treeNode 返回当前点击的json对象)
-            onClick:function(event, treeId, treeNode){
+            onCheck:function(event, treeId, treeNode){
                 alert("点击了节点：" + treeNode.pid);
                 alert("该节点的id为"+treeNode.id);
                 if(treeNode.status == 3){
@@ -299,7 +299,9 @@ function set_goods_goodstype(tid) {
 }
 function update_goodstype() {
     $.get("/goods/goodsTypeByid",{"typeid":typeid,"id":roleid},function (date) {
-                window.location.href="redirect:/goods/goodList";
+        if(date>0){
+            $("#ztree_div").dialog("close");
+        }
     },"json")
 }
 /*删除*/

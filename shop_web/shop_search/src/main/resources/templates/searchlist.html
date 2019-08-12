@@ -702,7 +702,7 @@
         <!-- 商品列表 -->
         <div class="shop_bd_list_content clearfix">
             <ul>
-                <li th:each="goods : ${goodsList}">
+                <li th:each="goods : ${goodsList.list}">
                     <dl>
                         <dt><a><img th:href="|http://127.0.0.1:8085/page/${goods.id}.html|" th:src="|http://192.168.225.188:8080/${#strings.listSplit(goods.gimage,'|')[0]}|" src="images/21151da3bdefc6d9a7120c991fe59800.jpg_small.jpg" /></a></dt>
                         <dd class="title"><a th:href="|http://127.0.0.1:8085/page/${goods.id}.html|"   th:utext="${goods.gname}">OCIAIZO春装水洗做旧短外套复古磨白短款牛仔外套春01C1417</a></dd>
@@ -716,7 +716,8 @@
         </div>
         <div class="clear"></div>
         <div class="pagination">
-            <ul><li><span>首页</span></li>
+            <a th:href="@{/search/page(pageNum=1)}"></a>
+            <ul><li><span><a th:href="@{/search/page(pageNum=1)}" th:text="首页"></a></span></li>
                 <li><span>上一页</span></li>
                 <li><span class="currentpage">1</span></li>
                 <li><span>下一页</span></li>

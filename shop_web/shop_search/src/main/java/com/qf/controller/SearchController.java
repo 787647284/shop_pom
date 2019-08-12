@@ -3,6 +3,7 @@ package com.qf.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.qf.Service.ISearchService;
 import com.qf.entity.Goods;
+import com.qf.entity.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +21,18 @@ public class SearchController {
     ISearchService searchService;
     @RequestMapping("/searchByKey")
     public String searchByKey(String keyword, Model model){
+        Page<Goods> page=new Page<>();
         System.out.println(keyword);
-        List<Goods> goods = searchService.searchByKey(keyword);
+        Page<Goods> goods = searchService.searchByKey(keyword,page);
         System.out.println(goods);
         model.addAttribute("goodsList",goods);
         return  "searchlist";
     }
+    @RequestMapping("/page")
+    public String page(Integer pageNum){
+        System.out.println("执行了");
+        System.out.println("pageNUm"+pageNum);
+        return null;
+    }
+
 }

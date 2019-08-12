@@ -3,6 +3,7 @@ package com.qf.serviceimpl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.qf.Service.ISearchService;
 import com.qf.entity.Goods;
+import com.qf.entity.Page;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -27,7 +28,7 @@ public class SeacrchServiceImpl implements ISearchService {
     @Autowired
     SolrClient solrClient;
     @Override
-    public List<Goods> searchByKey(String keyword) {
+    public Page<Goods> searchByKey(String keyword,Page page) {
         //设置solr查询对象
         SolrQuery solrQuery;
         if (keyword==null||keyword.trim()==""){
@@ -47,6 +48,10 @@ public class SeacrchServiceImpl implements ISearchService {
         solrQuery.setHighlightSimplePost("</font>");
         //设置需要高亮的字段
         solrQuery.addHighlightField("gname");
+        //设置分页参数 当前页
+        solrQuery.setStart((page.getPageNum()-1)*page.getPageSize());
+        //设置显示的条数
+        solrQuery.setRows(page.getPageSize());
         List<Goods> goodslist=new ArrayList<>();
         try {
             QueryResponse query =solrClient.query(solrQuery);
@@ -80,12 +85,13 @@ public class SeacrchServiceImpl implements ISearchService {
                 }
                 goodslist.add(goods);
             }
+            page.setList(goodslist);
         } catch (SolrServerException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return goodslist;
+        return page;
     }
 
     @Override
